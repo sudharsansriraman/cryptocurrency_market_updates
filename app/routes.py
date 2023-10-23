@@ -3,12 +3,19 @@ import requests
 from config import BITTREX_API_BASE_URL, BITTREX_API_KEY, BITTREX_API_SECRET
 import hashlib
 import hmac
-import time
+from datetime import datetime
+import pytz
 
 api = Blueprint('api', __name__)
 
+def get_utc_timestamp_milliseconds():
+    utc_time = datetime.now(pytz.UTC)
+    timestamp_seconds = (utc_time - datetime(1970, 1, 1, tzinfo=pytz.UTC)).total_seconds()
+    timestamp_milliseconds = int(timestamp_seconds * 1000)
+    return timestamp_milliseconds
+
 def generate_bittrex_headers(method, uri, content="", subaccount_id=""):
-    timestamp = str(int(time.time() * 1000))
+    timestamp = str(get_utc_timestamp_milliseconds())
     content_hash = hashlib.sha512(content.encode('utf-8')).hexdigest()
     pre_sign = f"{timestamp}{uri}{method}{content_hash}{subaccount_id}"
     signature = hmac.new(BITTREX_API_SECRET.encode('utf-8'), pre_sign.encode('utf-8'), hashlib.sha512).hexdigest()
