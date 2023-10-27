@@ -7,8 +7,8 @@ from swagger.swagger import swagger_bp
 def set_api_credentials():
     if 'CODE_ALREADY_EXECUTED' not in os.environ:
         # Code has not been executed in this session, prompt for API key and secret
-        api_key = getpass.getpass(prompt="Enter your Bittrex API key: ")
-        api_secret = getpass.getpass(prompt="Enter your Bittrex API secret: ")
+        api_key = getpass.getpass(prompt="Enter your Bittrex API key:")
+        api_secret = getpass.getpass(prompt="Enter your Bittrex API secret:")
 
         # Set them as environment variables
         os.environ['BITTREX_API_KEY'] = api_key

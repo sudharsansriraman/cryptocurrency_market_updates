@@ -1,10 +1,13 @@
 import pytest
-import main
+from main import create_app
+import os
 
 @pytest.fixture
 def app():
-    app = main.create_app()
+    app = create_app()
     app.config['TESTING'] = True
+    os.environ['BITTREX_API_KEY'] = "YOUR_API_KEY"
+    os.environ['BITTREX_API_SECRET'] = "YOUR_API_SECRET"
     yield app
 
 @pytest.fixture
