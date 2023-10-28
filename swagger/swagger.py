@@ -23,6 +23,7 @@ api = Api(
 # Create a namespace for your routes
 main_ns = api.namespace('main', description='Main API operations')
 
+# Define the endpoint for Swagger documentation
 @api.route('/market_summaries', methods=['GET'])
 class MarketSummaries(Resource):
     @api.response(200, 'Success')
@@ -38,6 +39,7 @@ class MarketSummaries(Resource):
         except requests.exceptions.RequestException as e:
             return {'error': str(e)}, 500
 
+# Define the endpoint for Swagger documentation
 @api.route('/market_summary/<market>', methods=['GET'])
 class MarketSummary(Resource):
     @api.response(200, 'Success')
@@ -54,12 +56,14 @@ class MarketSummary(Resource):
         except requests.exceptions.RequestException as e:
             return {'error': str(e)}, 500
 
+# Calculate the current UTC timestamp in milliseconds
 def get_utc_timestamp_milliseconds():
     utc_time = datetime.now(pytz.UTC)
     timestamp_seconds = (utc_time - datetime(1970, 1, 1, tzinfo=pytz.UTC)).total_seconds()
     timestamp_milliseconds = int(timestamp_seconds * 1000)
     return timestamp_milliseconds
 
+# Generate Bittrex API request headers
 def generate_bittrex_headers(method, uri, content="", subaccount_id=""):
     BITTREX_API_KEY = os.environ.get('BITTREX_API_KEY')
     BITTREX_API_SECRET = os.environ.get('BITTREX_API_SECRET')

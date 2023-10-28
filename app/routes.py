@@ -19,8 +19,6 @@ def generate_bittrex_headers(method, uri, content="", subaccount_id=""):
     BITTREX_API_KEY = os.environ.get('BITTREX_API_KEY')
     BITTREX_API_SECRET = os.environ.get('BITTREX_API_SECRET')
 
-    if BITTREX_API_KEY is None or BITTREX_API_SECRET is None:
-        return jsonify({'error': 'API key or secret not found in environment variables'}), 500
     timestamp = str(get_utc_timestamp_milliseconds())
     content_hash = hashlib.sha512(content.encode('utf-8')).hexdigest()
     pre_sign = f"{timestamp}{uri}{method}{content_hash}{subaccount_id}"
