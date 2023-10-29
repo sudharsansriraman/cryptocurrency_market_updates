@@ -1,6 +1,7 @@
 import pytest
 import os
 import requests
+import time
 from main import create_app
 from unittest.mock import patch
 
@@ -9,8 +10,8 @@ from unittest.mock import patch
 def app():
     app = create_app()
     app.config['TESTING'] = True
-    os.environ['BITTREX_API_KEY'] = "3987ed44be224a1395704ea96c02901b"
-    os.environ['BITTREX_API_SECRET'] = "6ef993a021224086b0d43782a710141c"
+    os.environ['BITTREX_API_KEY'] = "YOUR_API_KEY"
+    os.environ['BITTREX_API_SECRET'] = "YOUR_API_SECRET"
     yield app
 
 
@@ -51,6 +52,7 @@ def test_get_market_summary_invalid_symbol(client):
 # Test for a missing API key, expects 'APIKEY_INVALID' in the response
 def test_get_market_summary_missing_api_key(client):
     with patch.dict(os.environ, {'BITTREX_API_KEY': ''}):
+        time.sleep(5)
         response = client.get('/market_summary/ltc-btc')
         data = response.get_json()
         assert "APIKEY_INVALID" in data.get("code")
@@ -59,6 +61,7 @@ def test_get_market_summary_missing_api_key(client):
 # Test for a missing API secret, expects 'INVALID_SIGNATURE' in the response
 def test_get_market_summary_missing_api_secret(client):
     with patch.dict(os.environ, {'BITTREX_API_SECRET': ''}):
+        time.sleep(5)
         response = client.get('/market_summary/ltc-btc')
         data = response.get_json()
         assert "INVALID_SIGNATURE" in data.get("code")
